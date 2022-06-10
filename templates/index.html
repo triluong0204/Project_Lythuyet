@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <title>Document</title>
+</head>
+
+<body onpageshow="getData()">
+
+  <div id="alo" style="display: flex;">
+    <p>Nguyen Lieu</p>
+    <div id="listDataNguyenLieu"></div>
+  </div>
+  <div id="alo" style="display: flex;">
+    <p>Mon an</p>
+    <div id="listDataMonAn"></div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+    integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script>
+
+    let listDataNguyenLieu = '';
+    let listDataMonAn = '';
+
+    const showData = async (name) => {
+      let listData = [];
+      await axios.get(`http://127.0.0.1:5000/${name}`)
+        .then((response) => {
+          res = response.data;
+          listData = [...res];
+        })
+        .catch(err => {
+          console.error(err)
+        })
+
+      let result = `<ul>`
+      for (let item of listData) {
+        result += `<ll>
+            <div>${item.temp}</div>
+          </li>`
+      }
+      result += `</ul>`
+
+      return result;
+    }
+
+
+    const getData = async () => {
+      listDataNguyenLieu = await showData('hud');
+      listDataMonAn = await showData('data');
+      console.log('listDataNguyenLieu', listDataNguyenLieu);
+      console.log('listDataMonAn', listDataMonAn);
+
+      document.getElementById('listDataNguyenLieu').innerHTML = listDataNguyenLieu;
+      document.getElementById('listDataMonAn').innerHTML = listDataMonAn;
+
+    }
+
+
+
+  </script>
+</body>
+
+</html>
